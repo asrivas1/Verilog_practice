@@ -1,0 +1,37 @@
+// Code your testbench here
+// or browse Examples
+module counter_comp_tb;
+  
+  reg clk, rst;
+  reg load, up;
+  reg [7:0] data;
+  
+  wire [7:0] count;
+  
+  counter_comp counter_comp_DUT(clk, rst, load, up, data, count);
+  
+  initial begin
+    clk = 0;
+    rst = 0;
+    data = 8'd0;
+    load = 0;
+    up = 0;
+  end
+  
+  always 
+    #5 clk <= !clk;
+  
+  initial begin
+    $monitor ("clk = %d, rst = %d, load = %d, up = %d, data = %d", clk, rst, load, up, data);
+    $monitor ("count = %d", count);
+    $dumpfile("dump.vcd"); $dumpvars();
+  end
+  
+  initial begin
+    #5 rst <= 1; load <= 1; data <= 8'd20;
+    #20 load <= 0; up <= 1;
+    #30 up <= 0;
+    #50 $finish;
+  end
+  
+endmodule
